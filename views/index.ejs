@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TimeStamper | Parse the Date!</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="public/css/styles.css">
+    <link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700">
+  </head>
+  <body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+			  <h1>Timestamp Microservice &mdash;
+			  <br>A FreeCodeCamp Basejump</h1>
+			  
+			  <h3>User Stories</h3>
+			  <ul>
+			  	<li>I can pass a string as a parameter, and it will check to see whether that string contains either a unix timestamp or a natural language date (example: January 1, 2016).</li>
+			  	<li>If it does, it returns both the Unix timestamp and the natural language form of tha date.</li>
+			  	<li>If it does not contain a date or Unix timestamp, it returns null for those properties.</li>
+			  </ul>
+			  
+			  <h3>Trying It Out</h3>
+			  <p>Simply add a forward slash and your string to the homepage URL, as shown in Example Usage below, and hit Return/Enter. Try strings in natural language (<span class="date">"February 8, 2016"</span>), ISO (<span class="date">"2016-02-08"</span>) or Unix(<span class="date">1454889600</span>). You should get an object containing Unix and natural properties, as shown in Example Output. If you pass gobbledygook, such as "fjkajewoj" or "cat", both Unix and natural will return as null.</p>
+
+			  <h3>Example Usage</h3>
+			  <div class="code examples">
+			  	https://date-stream-cranewing.c9users.io/February%207,%202016
+			  	<br>https://date-stream-cranewing.c9users.io/1454821200
+			  </div>
+			  
+			  
+			  <h3>Example Output</h3>
+			  <div class="code output">
+			  	<p>{ <span>"unix":</span>  1454821200,
+			  	<span>"natural":</span> "February 7, 2016" }</p>
+			  </div>
+		  </div>
+		</div>
+	</div>	
+  </body>
+</html>

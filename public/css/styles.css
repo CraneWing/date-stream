@@ -1,0 +1,31 @@
+body {
+	font-family: 'Source Code Pro', sans-serif;
+	font-size: 14px;
+}
+
+.container {
+	padding-top: 50px;
+}
+
+.date {
+	color: blue;
+}
+
+.code {
+	background-color: #000;
+	padding: 10px;
+}
+
+.examples {
+   color: #3d93d5;
+}
+
+.output {
+   color: #daa637;
+}
+
+.output span {
+	color: #b9ca4a;
+}
+
+

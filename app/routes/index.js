@@ -1,57 +1,71 @@
-'use strict';
+var express  = require('express'),
+	router 	 = express.Router();
 
-var path = process.cwd();
-var ClickHandler = require(path + '/app/controllers/clickHandler.server.js');
+router.get('/', function(req, res) {
+  res.render('index');	
+});
 
-module.exports = function (app, passport) {
+router.get('/:str', function(req, res, next) {
+  var str = req.params.str;
+  var unix = '';
+  var natural = '';
+  var dateTypes = {"unix" : null, "natural" : null};
+  
+  if (str) {
+    // check if a valid date string
+    if (Date.parse(str)) { // natural date passed
+    	unix = Date.parse(str);
+    	dateTypes.unix = unix;
+    	unix = new Date(unix);
+    	natural = unixtoNatural(unix);
+    	dateTypes.natural = natural;
+    }
+    else if (!isNaN(str)) { // IS a number and possibly Unix
+    	unix = new Date(Number(str));
+    	if (unix !== 'Invalid Date') {
+    	 natural = unixtoNatural(unix);
+    	 dateTypes.natural = natural;
+    	 dateTypes.unix = parseInt(str);
+    	}
+    	else { // a number that is gibberish
+    	  unix = null;
+    	  natural = null;
+    	}
+    }
+    res.send(dateTypes);
+  }
+  else { // nothing
+    next();
+  }
+  
+});
 
-	function isLoggedIn (req, res, next) {
-		if (req.isAuthenticated()) {
-			return next();
-		} else {
-			res.redirect('/login');
-		}
-	}
+// to be standard in natural format, every valid date
+//string, whether passed as Unix or natural, is converted
+// to Unix first and then reconverted to natural.
 
-	var clickHandler = new ClickHandler();
+function unixtoNatural(date) {
+  // month full name "lookup dictionary"
+  var months = {
+                 'Jan' : 'January',
+                 'Feb' : 'February',
+                 'Mar' : 'March',
+                 'Apr' : 'April',
+                 'May' : 'May',
+                 'Jun' : 'June',
+                 'Jul' : 'July',
+                 'Aug' : 'August',
+                 'Sep' : 'September',
+                 'Oct' : 'October',
+                 'Nov' : 'November',
+                 'Dec' : 'December'
+              };
+  // split date into array to get date, month and year 
+  // and reformat to "Month 00, 0000".
+  date = date.toString();
+  var dateArr = date.split(' ');
+  var natural = months[dateArr[1]] + ' ' + Number(dateArr[2]) + ', ' + dateArr[3];
+  return natural;
+}
 
-	app.route('/')
-		.get(isLoggedIn, function (req, res) {
-			res.sendFile(path + '/public/index.html');
-		});
-
-	app.route('/login')
-		.get(function (req, res) {
-			res.sendFile(path + '/public/login.html');
-		});
-
-	app.route('/logout')
-		.get(function (req, res) {
-			req.logout();
-			res.redirect('/login');
-		});
-
-	app.route('/profile')
-		.get(isLoggedIn, function (req, res) {
-			res.sendFile(path + '/public/profile.html');
-		});
-
-	app.route('/api/:id')
-		.get(isLoggedIn, function (req, res) {
-			res.json(req.user.github);
-		});
-
-	app.route('/auth/github')
-		.get(passport.authenticate('github'));
-
-	app.route('/auth/github/callback')
-		.get(passport.authenticate('github', {
-			successRedirect: '/',
-			failureRedirect: '/login'
-		}));
-
-	app.route('/api/:id/clicks')
-		.get(isLoggedIn, clickHandler.getClicks)
-		.post(isLoggedIn, clickHandler.addClick)
-		.delete(isLoggedIn, clickHandler.resetClicks);
-};
+module.exports = router;
